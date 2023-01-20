@@ -1,0 +1,54 @@
+version: "3"
+
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    networks:
+      - services
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./services/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: unless-stopped
+    networks:
+      - services
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data-volume:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=https"
+      - "traefik.http.services.traefik.loadbalancer.server.port=9443"
+
+networks:
+  services:
+    name: services
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16
+      options:
+        com.docker.network.bridge.enable_icc: true
+        com.docker.network.bridge.enable_ip_masquerade: true
+        com.docker.network.bridge.host_binding_ipv4: 0.0.0.0
+        com.docker.network.bridge.name: services
+
+volumes:
+  portainer-data-volume:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/portainer-data-volume"
