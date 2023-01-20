@@ -3,10 +3,11 @@ http:
     pve:
       entryPoints:
         - https
+      tls: true
       service: grabby
       rule: Host(`grabby.home`)
   services:
     grabby:
       loadBalancer:
         servers:
-          - url: https://grabby:8006
+          - url: https://grabby.home:8006
