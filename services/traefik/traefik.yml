@@ -1,14 +1,15 @@
 api:
-  insecure: true
   dashboard: true
-  debug: true
+  # insecure: true
+  # debug: true
 entryPoints:
   http:
     address: ":80"
   https:
     address: ":443"
 serversTransport:
-  insecureSkipVerify: true # needed for self-signed cert containers
+  # needed for self-signed cert containers
+  insecureSkipVerify: true
 providers:
   docker:
     defaultRule: Host(`{{ normalize .Name }}.home.singhsays.com`)
@@ -20,6 +21,7 @@ certificatesResolvers:
   letsencrypt:
     acme:
       email: singhsays@gmail.com
+      # only used for initial settings/testing, doesn't generate valid certs
       # caServer: https://acme-staging-v02.api.letsencrypt.org/directory
       storage: /data/acme.json
       dnsChallenge:
