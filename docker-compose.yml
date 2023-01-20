@@ -13,7 +13,8 @@ services:
       - 80:80
       - 443:443
       - 8080:8080
-    env_file: ./traefik.env
+    environment:
+      - "DO_AUTH_TOKEN_FILE=/run/secrets/do_auth_token"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -21,7 +22,7 @@ services:
       - ./services/traefik/config.yml:/config.yml:ro
       - cert-data-volume:/data
     secrets:
-      - do-auth-token
+      - do_auth_token
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=http"
@@ -33,7 +34,7 @@ services:
       - "traefik.http.routers.traefik-tls.entrypoints=https"
       - "traefik.http.routers.traefik-tls.rule=Host(`traefik.home.singhsays.com`)"
       - "traefik.http.routers.traefik-tls.tls=true"
-      - "traefik.http.routers.traefik-tls.tls.certresolver=digitalocean"
+      - "traefik.http.routers.traefik-tls.tls.certresolver=letsencrypt"
       - "traefik.http.routers.traefik-tls.tls.domains[0].main=home.singhsays.com"
       - "traefik.http.routers.traefik-tls.tls.domains[0].sans=*.home.singhsays.com"
       - "traefik.http.routers.traefik-tls.service=api@internal"
@@ -57,7 +58,7 @@ services:
       - "traefik.http.routers.portainer-tls.entrypoints=https"
       - "traefik.http.routers.portainer-tls.rule=Host(`portainer.home.singhsays.com`)"
       - "traefik.http.routers.portainer-tls.tls=true"
-      - "traefik.http.routers.portainer-tls.tls.certresolver=digitalocean"
+      - "traefik.http.routers.portainer-tls.tls.certresolver=letsencrypt"
       - "traefik.http.routers.portainer-tls.tls.domains[0].main=home.singhsays.com"
       - "traefik.http.routers.portainer-tls.tls.domains[0].sans=*.home.singhsays.com"
       - "traefik.http.services.portainer.loadbalancer.server.scheme=https"
@@ -92,3 +93,7 @@ volumes:
       type: "nfs"
       o: "addr=10.0.0.10,rw"
       device: ":/volume1/docker/cert-data-volume"
+
+secrets:
+  do_auth_token:
+    file: "./do_auth_token.secret"

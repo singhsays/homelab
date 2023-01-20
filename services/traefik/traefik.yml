@@ -16,11 +16,11 @@ providers:
     network: services
   file:
     filename: /config.yml
-certificateResolvers:
-  digitalocean:
+certificatesResolvers:
+  letsencrypt:
     acme:
       email: singhsays@gmail.com
-      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      # caServer: https://acme-staging-v02.api.letsencrypt.org/directory
       storage: /data/acme.json
       dnsChallenge:
         provider: digitalocean
