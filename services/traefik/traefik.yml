@@ -12,3 +12,5 @@ providers:
     defaultRule: Host(`{{ normalize .Name }}.home`)
     exposedByDefault: false
     network: services
+  file:
+    filename: /config.yml

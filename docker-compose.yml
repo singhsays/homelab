@@ -14,8 +14,10 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./services/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./services/traefik/config.yml:/config.yml:ro
     labels:
       - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`traefik.home`)"
       - "traefik.http.routers.traefik.entrypoints=http"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
   portainer:
@@ -29,6 +31,7 @@ services:
       - portainer-data-volume:/data
     labels:
       - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.home`)"
       - "traefik.http.routers.portainer.entrypoints=https"
       - "traefik.http.services.portainer.loadbalancer.server.port=9443"
 
