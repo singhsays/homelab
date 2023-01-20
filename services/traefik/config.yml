@@ -5,8 +5,8 @@ http:
         - https
       service: grabby
       rule: Host(`grabby.home`)
-services:
-  grabby:
-    loadBalancer:
-      servers:
-        - url: https://grabby:8006
+  services:
+    grabby:
+      loadBalancer:
+        servers:
+          - url: https://grabby:8006
