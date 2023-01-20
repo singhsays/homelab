@@ -29,8 +29,8 @@ services:
       - portainer-data-volume:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.entrypoints=https"
-      - "traefik.http.services.traefik.loadbalancer.server.port=9443"
+      - "traefik.http.routers.portainer.entrypoints=https"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9443"
 
 networks:
   services:
