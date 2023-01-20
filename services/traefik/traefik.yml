@@ -11,8 +11,16 @@ serversTransport:
   insecureSkipVerify: true # needed for self-signed cert containers
 providers:
   docker:
-    defaultRule: Host(`{{ normalize .Name }}.home`)
+    defaultRule: Host(`{{ normalize .Name }}.home.singhsays.com`)
     exposedByDefault: false
     network: services
   file:
     filename: /config.yml
+certificateResolvers:
+  digitalocean:
+    acme:
+      email: singhsays@gmail.com
+      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      storage: /data/acme.json
+      dnsChallenge:
+        provider: digitalocean
