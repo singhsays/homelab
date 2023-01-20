@@ -9,4 +9,6 @@ entryPoints:
     address: ":443"
 providers:
   docker:
+    defaultRule: Host(`{{ normalize .Name }}.home`)
     exposedByDefault: false
+    network: services
