@@ -47,6 +47,7 @@ networks:
 
 volumes:
   portainer-data-volume:
+    name: portianer-data-volume
     driver: local
     driver_opts:
       type: "nfs"
