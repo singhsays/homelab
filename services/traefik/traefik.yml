@@ -8,4 +8,4 @@ entryPoints:
     address: ":443"
 providers:
   docker:
-    exposeByDefault: false
+    exposedByDefault: false
