@@ -13,8 +13,7 @@ services:
       - 80:80
       - 443:443
       - 8080:8080
-    environment:
-      DO_AUTH_TOKEN: "cat /run/secrets/do-auth-token"
+    env_file: ./traefik.env
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -93,7 +92,3 @@ volumes:
       type: "nfs"
       o: "addr=10.0.0.10,rw"
       device: ":/volume1/docker/cert-data-volume"
-
-secrets:
-  do-auth-token:
-    file: ./secrets/do-auth-token.secret
