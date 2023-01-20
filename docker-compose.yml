@@ -6,7 +6,7 @@ services:
     container_name: traefik
     restart: unless-stopped
     security_opt:
-      - no-new-privileges: true
+      - no-new-privileges:true
     networks:
       - services
     ports:
