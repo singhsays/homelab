@@ -12,6 +12,7 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 5432:5432
     environment:
       - "DO_AUTH_TOKEN_FILE=/run/secrets/do_auth_token"
     volumes:
@@ -79,7 +80,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.tcp.routers.postgres.entrypoints=postgres"
-      - "traefik.tcp.routers.postgres.rule=Host(`db.home.singhsays.com`)"
+      - "traefik.tcp.routers.postgres.rule=HostSNI(`*`)"
       - "traefik.tcp.routers.postgres.service=postgres"
       - "traefik.tcp.services.postgres.loadbalancer.server.port=5432"
       - "traefik.docker.network=services"
