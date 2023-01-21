@@ -76,6 +76,13 @@ services:
       - postgres_password
     volumes:
       - postgres-data-volume:/var/lib/postgresql/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.tcp.routers.postgres.entrypoints=postgres"
+      - "traefik.tcp.routers.postgres.rule=Host(`db.home.singhsays.com`)"
+      - "traefik.tcp.routers.postgres.service=postgres"
+      - "traefik.tcp.services.postgres.loadbalancer.server.port=5432"
+      - "traefik.docker.network=services"
 
 networks:
   services:
