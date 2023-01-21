@@ -12,7 +12,6 @@ services:
     ports:
       - 80:80
       - 443:443
-      - 8080:8080
     environment:
       - "DO_AUTH_TOKEN_FILE=/run/secrets/do_auth_token"
     volumes:
@@ -65,6 +64,19 @@ services:
       - "traefik.http.services.portainer.loadbalancer.server.port=9443"
       - "traefik.docker.network=services"
 
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: unless-stopped
+    networks:
+      - services
+    environment:
+      - "POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password"
+    secrets:
+      - postgres_password
+    volumes:
+      - postgres-data-volume:/var/lib/postgresql/data
+
 networks:
   services:
     name: services
@@ -93,7 +105,16 @@ volumes:
       type: "nfs"
       o: "addr=10.0.0.10,rw"
       device: ":/volume1/docker/cert-data-volume"
+  postgres-data-volume:
+    name: postgres-data-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/postgres-data-volume"
 
 secrets:
   do_auth_token:
     file: "./do_auth_token.secret"
+  postgres_password:
+    file: "./postgres_password.secret"
