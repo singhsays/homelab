@@ -1,0 +1,8 @@
+port: 3000
+db:
+  type: postgres
+  host: localhost
+  port: 5432
+  user: wikijs-rw
+  db: wiki
+  ssl: false
