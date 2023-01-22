@@ -1,7 +1,7 @@
 port: 3000
 db:
   type: postgres
-  host: localhost
+  host: db.home.singhsays.com
   port: 5432
   user: wikijs-rw
   db: wiki
