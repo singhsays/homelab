@@ -3,6 +3,6 @@ db:
   type: postgres
   host: db.home.singhsays.com
   port: 5432
-  user: wikijs-rw
+  user: wikijs
   db: wiki
   ssl: false
