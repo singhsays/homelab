@@ -85,6 +85,36 @@ services:
       - "traefik.tcp.services.postgres.loadbalancer.server.port=5432"
       - "traefik.docker.network=services"
 
+  wiki:
+    image: ghcr.io/requarks/wiki:2
+    container_name: wiki
+    restart: unless-stopped
+    networks:
+      - services
+    environment:
+      - "DB_PASS_FILE=/run/secrets/wikijs_postgres_password"
+    secrets:
+      - wikijs_postgres_password
+    volumes:
+      - ./services/wiki/config.yml:/wiki/config.yml:ro
+    depends_on:
+      - postgres
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wiki.entrypoints=http"
+      - "traefik.http.routers.wiki.rule=Host(`wiki.home.singhsays.com`)"
+      - "traefik.http.middlewares.wiki-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.wiki.middlewares=wiki-https-redirect"
+      - "traefik.http.routers.wiki-tls.entrypoints=https"
+      - "traefik.http.routers.wiki-tls.rule=Host(`wiki.home.singhsays.com`)"
+      - "traefik.http.routers.wiki-tls.tls=true"
+      - "traefik.http.routers.wiki-tls.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.wiki-tls.tls.domains[0].main=home.singhsays.com"
+      - "traefik.http.routers.wiki-tls.tls.domains[0].sans=*.home.singhsays.com"
+      - "traefik.http.services.wiki.loadbalancer.server.port=3000"
+      - "traefik.docker.network=services"
+
 networks:
   services:
     name: services
@@ -126,3 +156,5 @@ secrets:
     file: "./do_auth_token.secret"
   postgres_password:
     file: "./postgres_password.secret"
+  wikijs_postgres_password:
+    file: "./wikijs_postgres_password.secret"
