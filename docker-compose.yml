@@ -115,6 +115,34 @@ services:
       - "traefik.http.services.wiki.loadbalancer.server.port=3000"
       - "traefik.docker.network=services"
 
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    restart: unless-stopped
+    networks:
+      - services
+    environment:
+      - JELLYFIN_PublishedServerUrl=https://jellyfin.home.singhsays.com
+    volumes:
+      - jellyfin-config-volume:/config
+      - jellyfin-cache-volume:/cache
+      - music-data-volume:/media:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.entrypoints=http"
+      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.home.singhsays.com`)"
+      - "traefik.http.middlewares.jellyfin-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.jellyfin.middlewares=jellyfin-https-redirect"
+      - "traefik.http.routers.jellyfin-tls.entrypoints=https"
+      - "traefik.http.routers.jellyfin-tls.rule=Host(`jellyfin.home.singhsays.com`)"
+      - "traefik.http.routers.jellyfin-tls.tls=true"
+      - "traefik.http.routers.jellyfin-tls.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.jellyfin-tls.tls.domains[0].main=home.singhsays.com"
+      - "traefik.http.routers.jellyfin-tls.tls.domains[0].sans=*.home.singhsays.com"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+      - "traefik.docker.network=services"
+
 networks:
   services:
     name: services
@@ -150,6 +178,27 @@ volumes:
       type: "nfs"
       o: "addr=10.0.0.10,rw"
       device: ":/volume1/docker/postgres-data-volume"
+  jellyfin-cache-volume:
+    name: jellyfin-cache-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/jellyfin-data-volume/cache"
+  jellyfin-config-volume:
+    name: jellyfin-config-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/jellyfin-data-volume/config"
+  music-data-volume:
+    name: music-data-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/music"
 
 secrets:
   do_auth_token:
