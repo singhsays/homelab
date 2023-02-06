@@ -6,22 +6,11 @@ http:
       rule: Host(`grabby.home.singhsays.com`)
       tls: {}
       service: pve
-    edgefw:
-      entryPoints:
-        - https
-      rule: Host(`edgefw.home.singhsays.com`)
-      tls: {}
-      service: edgefw
   services:
     pve:
       loadBalancer:
         servers:
           - url: https://10.0.0.12:8006
-        passHostHeader: true
-    edgefw:
-      loadBalancer:
-        servers:
-          - url: https://10.0.0.1:80
         passHostHeader: true
   middlewares:
     https-redirect:
