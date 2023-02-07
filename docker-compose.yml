@@ -69,6 +69,8 @@ services:
     image: lscr.io/linuxserver/syncthing:latest
     container_name: syncthing
     restart: unless-stopped
+    networks:
+      - services
     volumes:
       - syncthing-config-volume:/config
       - syncthing-data-volume:/data
