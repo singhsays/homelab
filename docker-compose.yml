@@ -87,6 +87,7 @@ services:
       - "traefik.http.routers.syncthing-tls.tls.certresolver=letsencrypt"
       - "traefik.http.routers.syncthing-tls.tls.domains[0].main=home.singhsays.com"
       - "traefik.http.routers.syncthing-tls.tls.domains[0].sans=*.home.singhsays.com"
+      - "traefik.http.services.syncthing.loadbalancer.server.scheme=https"
       - "traefik.http.services.syncthing.loadbalancer.server.port=8384"
       - "traefik.docker.network=services"
     ports:
