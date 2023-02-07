@@ -71,6 +71,9 @@ services:
     restart: unless-stopped
     networks:
       - services
+    environment:
+      - PUID=1026
+      - PGID=100
     volumes:
       - syncthing-config-volume:/config
       - syncthing-data-volume:/data
