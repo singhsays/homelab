@@ -65,6 +65,33 @@ services:
       - "traefik.http.services.portainer.loadbalancer.server.port=9443"
       - "traefik.docker.network=services"
 
+  syncthing:
+    image: lscr.io/linuxserver/syncthing:latest
+    container_name: syncthing
+    restart: unless-stopped
+    volumes:
+      - syncthing-config-volume:/config
+      - syncthing-data-volume:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.syncthing.entrypoints=http"
+      - "traefik.http.routers.syncthing.rule=Host(`syncthing.home.singhsays.com`)"
+      - "traefik.http.middlewares.syncthing-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.syncthing.middlewares=syncthing-https-redirect"
+      - "traefik.http.routers.syncthing-tls.entrypoints=https"
+      - "traefik.http.routers.syncthing-tls.rule=Host(`syncthing.home.singhsays.com`)"
+      - "traefik.http.routers.syncthing-tls.tls=true"
+      - "traefik.http.routers.syncthing-tls.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.syncthing-tls.tls.domains[0].main=home.singhsays.com"
+      - "traefik.http.routers.syncthing-tls.tls.domains[0].sans=*.home.singhsays.com"
+      - "traefik.http.services.syncthing.loadbalancer.server.port=8384"
+      - "traefik.docker.network=services"
+    ports:
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -148,6 +175,20 @@ volumes:
       type: "nfs"
       o: "addr=10.0.0.10,rw"
       device: ":/volume1/docker/postgres-data-volume"
+  syncthing-data-volume:
+    name: syncthing-data-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/syncthing-data-volume/data"
+  syncthing-config-volume:
+    name: syncthing-config-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/syncthing-data-volume/config"
   jellyfin-cache-volume:
     name: jellyfin-cache-volume
     driver: local
