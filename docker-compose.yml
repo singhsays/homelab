@@ -99,6 +99,53 @@ services:
       - 22000:22000/udp
       - 21027:21027/udp
 
+  unifi:
+    image: lscr.io/linuxserver/unifi-network-application:latest
+    container_name: unifi
+    restart: always
+    networks:
+      - services
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - MONGO_USER=unifi
+      - FILE__MONGO_PASS=/run/secrets/unifidb_password
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_DBNAME=unifi
+    secrets:
+      - unifidb_password
+    volumes:
+      - unifi-data-volume:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.unifi.entrypoints=http"
+      - "traefik.http.routers.unifi.rule=Host(`unifi.home.singhsays.com`)"
+      - "traefik.http.middlewares.unifi-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.unifi.middlewares=unifi-https-redirect"
+      - "traefik.http.routers.unifi-tls.entrypoints=https"
+      - "traefik.http.routers.unifi-tls.rule=Host(`unifi.home.singhsays.com`)"
+      - "traefik.http.routers.unifi-tls.tls=true"
+      - "traefik.http.routers.unifi-tls.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.unifi-tls.tls.domains[0].main=home.singhsays.com"
+      - "traefik.http.routers.unifi-tls.tls.domains[0].sans=*.home.singhsays.com"
+      - "traefik.http.services.unifi.loadbalancer.server.scheme=https"
+      - "traefik.http.services.unifi.loadbalancer.server.port=8443"
+      - "traefik.docker.network=services"
+    ports:
+      - 3478:3478/udp
+      - 10001:10001/udp
+      - 1900:1900/udp
+      - 8080:8080
+      - 8081:8081
+      - 8443:8443
+      - 8843:8843
+      - 8880:8880
+      - 6789:6789
+      - 5514:5514/udp
+
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -245,6 +292,13 @@ volumes:
       type: "nfs"
       o: "addr=10.0.0.10,rw"
       device: ":/volume1/music"
+  unifi-data-volume:
+    name: unifi-data-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/unifi-data-volume"
 
 secrets:
   do_auth_token:
@@ -253,3 +307,5 @@ secrets:
     file: "./postgres_password.secret"
   mongodb_password:
     file: "./mongodb_password.secret"
+  unifidb_password:
+    file: "./unifidb_password.secret"
