@@ -13,6 +13,7 @@ services:
       - 80:80
       - 443:443
       - 5432:5432
+      - 27017:27017
     environment:
       - "DO_AUTH_TOKEN_FILE=/run/secrets/do_auth_token"
     volumes:
