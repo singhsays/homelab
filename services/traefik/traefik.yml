@@ -9,6 +9,8 @@ entryPoints:
     address: ":443"
   postgres:
     address: ":5432"
+  mongodb:
+    address: ":27017"
 serversTransport:
   # needed for self-signed cert containers
   insecureSkipVerify: true
