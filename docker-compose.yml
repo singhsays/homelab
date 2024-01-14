@@ -146,6 +146,24 @@ services:
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
       - "traefik.docker.network=services"
 
+  factoriosrv:
+    image: factoriotools/factorio
+    container_name: factoriosrv
+    restart: unless-stopped
+    environment:
+      - FACTORIO_SERVER_NAME="singhsays"
+      - FACTORIO_SERVER_DESCRIPTION="singhsays factorio server"
+      - FACTORIO_SERVER_VISIBILITY_PUBLIC=false
+      - FACTORIO_SERVER_VERIFY_IDENTITY=false
+      - FACTORIO_SERVER_ALLOW_COMMANDS=true
+      - FACTORIO_SERVER_AUTOSAVE_INTERVAL=10
+      - FACTORIO_SERVER_AUTOSAVE_SLOTS=5
+    volumes:
+      - factorio-data-volume:/factorio
+    ports:
+      - 34197:34197/udp
+      - 27015:27015/tcp
+
 networks:
   services:
     name: services
@@ -216,6 +234,13 @@ volumes:
       type: "nfs"
       o: "addr=10.0.0.10,rw"
       device: ":/volume1/music"
+  factorio-data-volume:
+    name: factorio-data-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/factorio-data-volume"
 
 secrets:
   do_auth_token:
