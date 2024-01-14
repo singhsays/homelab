@@ -150,6 +150,7 @@ services:
     image: factoriotools/factorio
     container_name: factoriosrv
     restart: unless-stopped
+    network_mode: "host"
     environment:
       - FACTORIO_SERVER_NAME="singhsays"
       - FACTORIO_SERVER_DESCRIPTION="singhsays factorio server"
