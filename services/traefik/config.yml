@@ -6,22 +6,11 @@ http:
       rule: Host(`grabby.home.singhsays.com`)
       tls: {}
       service: pve
-    unifi:
-      entryPoints:
-        - https
-      rule: Host(`unifi.home.singhsays.com`)
-      tls: {}
-      service: unifi
   services:
     pve:
       loadBalancer:
         servers:
           - url: https://10.0.0.12:8006
-        passHostHeader: true
-    unifi:
-      loadBalancer:
-        servers:
-          - url: https://10.0.0.7:8443
         passHostHeader: true
   middlewares:
     https-redirect:

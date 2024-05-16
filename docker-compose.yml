@@ -194,6 +194,20 @@ services:
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
       - "traefik.docker.network=services"
 
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    restart: unless-stopped
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "80:80/tcp"
+    environment:
+      TZ: "America/Los_Angeles"
+    volumes:
+      - pihole-data-volume:/etc/pihole
+      - pihole-config-volume:/etc/dnsmasq.d
+
   factoriosrv:
     image: factoriotools/factorio
     container_name: factoriosrv
@@ -276,6 +290,20 @@ volumes:
       type: "nfs"
       o: "addr=10.0.0.10,rw"
       device: ":/volume1/docker/omada-data-volume/logs"
+  pihole-data-volume:
+    name: pihole-data-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/pihole-data-volume/data"
+  pihole-config-volume:
+    name: pihole-config-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/pihole-data-volume/config"
   jellyfin-cache-volume:
     name: jellyfin-cache-volume
     driver: local
