@@ -118,6 +118,56 @@ services:
       - "traefik.tcp.services.postgres.loadbalancer.server.port=5432"
       - "traefik.docker.network=services"
 
+  omada:
+    image: mbentley/omada-controller:latest
+    container_name: omada
+    restart: unless-stopped
+    ulimits:
+      nofile:
+        soft: 4096
+        hard: 8192
+    stop_grace_period: 60s
+    network_mode: host
+    environment:
+      - PUID=508
+      - PGID=508
+      - MANAGE_HTTP_PORT=8088
+      - MANAGE_HTTPS_PORT=8043
+      - PORTAL_HTTP_PORT=8088
+      - PORTAL_HTTPS_PORT=8843
+      - PORT_APP_DISCOVERY=27001
+      - PORT_ADOPT_V1=29812
+      - PORT_UPGRADE_V1=29813
+      - PORT_MANAGER_V1=29811
+      - PORT_MANAGER_V2=29814
+      - PORT_DISCOVERY=29810
+      - PORT_TRANSFER_V2=29815
+      - PORT_RTTY=29816
+      - SHOW_SERVER_LOGS=true
+      - SHOW_MONGODB_LOGS=false
+      - SSL_CERT_NAME=tls.crt
+      - SSL_KEY_NAME=tls.key
+      - TZ=Etc/UTC
+    volumes:
+      - omada-data-volume:/opt/tplink/EAPController/data
+      - omada-logs-volume:/opt/tplink/EAPController/logs
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.omada.entrypoints=http"
+      - "traefik.http.routers.omada.rule=Host(`omada.home.singhsays.com`)"
+      - "traefik.http.middlewares.omada-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.omada.middlewares=portainer-https-redirect"
+      - "traefik.http.routers.omada-tls.entrypoints=https"
+      - "traefik.http.routers.omada-tls.rule=Host(`portainer.home.singhsays.com`)"
+      - "traefik.http.routers.omada-tls.tls=true"
+      - "traefik.http.routers.omada-tls.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.omada-tls.tls.domains[0].main=home.singhsays.com"
+      - "traefik.http.routers.omada-tls.tls.domains[0].sans=*.home.singhsays.com"
+      - "traefik.http.services.omada.loadbalancer.server.scheme=https"
+      - "traefik.http.services.omada.loadbalancer.server.port=9443"
+      - "traefik.docker.network=services"
+
   jellyfin:
     image: jellyfin/jellyfin
     container_name: jellyfin
@@ -214,6 +264,20 @@ volumes:
       type: "nfs"
       o: "addr=10.0.0.10,rw"
       device: ":/volume1/docker/syncthing-data-volume/config"
+  omada-data-volume:
+    name: omada-data-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/omada-data-volume/data"
+  omada-logs-volume:
+    name: omada-logs-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/omada-data-volume/logs"
   jellyfin-cache-volume:
     name: jellyfin-cache-volume
     driver: local
