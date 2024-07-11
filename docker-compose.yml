@@ -117,7 +117,7 @@ services:
       - "traefik.docker.network=services"
 
   omada:
-    image: mbentley/omada-controller:latest
+    image: mbentley/omada-controller:5.13
     container_name: omada
     restart: unless-stopped
     ulimits:
@@ -149,21 +149,6 @@ services:
     volumes:
       - omada-data-volume:/opt/tplink/EAPController/data
       - omada-logs-volume:/opt/tplink/EAPController/logs
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.omada.entrypoints=http"
-      - "traefik.http.routers.omada.rule=Host(`omada.home.singhsays.com`)"
-      - "traefik.http.middlewares.omada-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.routers.omada.middlewares=portainer-https-redirect"
-      - "traefik.http.routers.omada-tls.entrypoints=https"
-      - "traefik.http.routers.omada-tls.rule=Host(`omada.home.singhsays.com`)"
-      - "traefik.http.routers.omada-tls.tls=true"
-      - "traefik.http.routers.omada-tls.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.omada-tls.tls.domains[0].main=home.singhsays.com"
-      - "traefik.http.routers.omada-tls.tls.domains[0].sans=*.home.singhsays.com"
-      - "traefik.http.services.omada.loadbalancer.server.port=8088"
-      - "traefik.docker.network=services"
 
   jellyfin:
     image: jellyfin/jellyfin
@@ -197,14 +182,22 @@ services:
     image: pihole/pihole:latest
     container_name: pihole
     restart: unless-stopped
+    networks:
+      - services
     ports:
       - "53:53/tcp"
       - "53:53/udp"
+      - "853:853"
     environment:
       TZ: "America/Los_Angeles"
+      WEBPASSWORD_FILE: "/run/secrets/pihole_password"
+      DNSMASQ_LISTENING: "all"
+      VIRTUAL_HOST: "pihole.home.singhsays.com"
     volumes:
       - pihole-data-volume:/etc/pihole
       - pihole-config-volume:/etc/dnsmasq.d
+    secrets:
+      - pihole_password
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.pihole.entrypoints=http"
@@ -351,3 +344,5 @@ secrets:
     file: "./do_auth_token.secret"
   postgres_password:
     file: "./postgres_password.secret"
+  pihole_password:
+    file: "./pihole_password.secret"
