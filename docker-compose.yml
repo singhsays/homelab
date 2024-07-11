@@ -162,7 +162,6 @@ services:
       - "traefik.http.routers.omada-tls.tls.certresolver=letsencrypt"
       - "traefik.http.routers.omada-tls.tls.domains[0].main=home.singhsays.com"
       - "traefik.http.routers.omada-tls.tls.domains[0].sans=*.home.singhsays.com"
-      - "traefik.http.services.omada.loadbalancer.server.scheme=https"
       - "traefik.http.services.omada.loadbalancer.server.port=8088"
       - "traefik.docker.network=services"
 
