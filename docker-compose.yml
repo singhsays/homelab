@@ -220,13 +220,10 @@ services:
     restart: unless-stopped
     network_mode: "host"
     environment:
-      - FACTORIO_SERVER_NAME="singhsays"
-      - FACTORIO_SERVER_DESCRIPTION="singhsays factorio server"
-      - FACTORIO_SERVER_VISIBILITY_PUBLIC=false
-      - FACTORIO_SERVER_VERIFY_IDENTITY=false
-      - FACTORIO_SERVER_ALLOW_COMMANDS=true
-      - FACTORIO_SERVER_AUTOSAVE_INTERVAL=10
-      - FACTORIO_SERVER_AUTOSAVE_SLOTS=5
+      - INSTANCE_NAME="singhsays"
+      - INSTANCE_DESC="singhsays factorio server"
+      - USERNAME="singhsays"
+      - TOKEN=${FACTORIO_TOKEN}
     volumes:
       - factorio-data-volume:/factorio
     ports:
