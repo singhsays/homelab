@@ -117,7 +117,7 @@ services:
       - "traefik.docker.network=services"
 
   omada:
-    image: mbentley/omada-controller:5.13
+    image: mbentley/omada-controller:5.15
     container_name: omada
     restart: unless-stopped
     ulimits:
