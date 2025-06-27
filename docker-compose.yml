@@ -215,7 +215,7 @@ services:
       - "traefik.docker.network=services"
 
   factoriosrv:
-    image: factoriotools/factorio
+    image: factoriotools/factorio:stable
     container_name: factoriosrv
     restart: unless-stopped
     network_mode: "host"
@@ -224,7 +224,7 @@ services:
       - INSTANCE_DESC="singhsays factorio server"
       - USERNAME="singhsays"
       - TOKEN=${FACTORIO_TOKEN}
-      - DLC_SPACE_AGE=false
+      - DLC_SPACE_AGE=true
     volumes:
       - factorio-data-volume:/factorio
     ports:
