@@ -232,6 +232,7 @@ services:
       - 27015:27015/tcp
 
   mariadb:
+    container_name: mariadb
     image: mariadb
     restart: always
     volumes:
@@ -243,6 +244,7 @@ services:
       MARIADB_DATABASE: teamspeak
 
   teamspeak:
+    container_name: teamspeak
     image: teamspeak
     restart: always
     depends_on:
