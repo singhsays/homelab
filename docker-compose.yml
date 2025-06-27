@@ -231,6 +231,40 @@ services:
       - 34197:34197/udp
       - 27015:27015/tcp
 
+  mariadb:
+    image: mariadb
+    restart: always
+    volumes:
+      - mariadb-data-volume:/var/lib/mysql
+    networks:
+      - services
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+      MARIADB_DATABASE: teamspeak
+
+  teamspeak:
+    image: teamspeak
+    restart: always
+    depends_on:
+      - mariadb
+    volumes:
+      - teamspeak-data-volume:/var/ts3server
+    networks:
+      - services
+    ports:
+      - 9987:9987/udp
+      - 10011:10011
+      - 30033:30033
+    environment:
+      TS3SERVER_DB_PLUGIN: ts3db_mariadb
+      TS3SERVER_DB_SQLCREATEPATH: create_mariadb
+      TS3SERVER_DB_HOST: mariadb
+      TS3SERVER_DB_USER: root
+      TS3SERVER_DB_PASSWORD: example
+      TS3SERVER_DB_NAME: teamspeak
+      TS3SERVER_DB_WAITUNTILREADY: 30
+      TS3SERVER_LICENSE: accept
+
 networks:
   services:
     name: services
@@ -336,6 +370,20 @@ volumes:
       type: "nfs"
       o: "addr=10.0.0.10,rw"
       device: ":/volume1/docker/factorio-data-volume"
+  teamspeak-data-volume:
+    name: teamspeak-data-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/teamspeak-data-volume"
+  mariadb-data-volume:
+    name: mariadb-data-volume
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.10,rw"
+      device: ":/volume1/docker/mariadb-data-volume"
 
 secrets:
   do_auth_token:
