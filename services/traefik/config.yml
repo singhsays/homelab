@@ -3,14 +3,14 @@ http:
     pve:
       entryPoints:
         - https
-      rule: Host(`grabby.home.singhsays.com`)
+      rule: Host(`elanor.home.singhsays.com`)
       tls: {}
       service: pve
   services:
     pve:
       loadBalancer:
         servers:
-          - url: https://10.0.0.12:8006
+          - url: https://10.0.0.8:8006
         passHostHeader: true
   middlewares:
     https-redirect:

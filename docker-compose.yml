@@ -37,199 +37,199 @@ services:
       - "traefik.http.routers.traefik-tls.tls.domains[0].sans=*.home.singhsays.com"
       - "traefik.http.routers.traefik-tls.service=api@internal"
 
-  portainer:
-    image: portainer/portainer-ee:latest
-    container_name: portainer
-    restart: always
-    networks:
-      - services
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer-data-volume:/data
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.portainer.entrypoints=http"
-      - "traefik.http.routers.portainer.rule=Host(`portainer.home.singhsays.com`)"
-      - "traefik.http.middlewares.portainer-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.routers.portainer.middlewares=portainer-https-redirect"
-      - "traefik.http.routers.portainer-tls.entrypoints=https"
-      - "traefik.http.routers.portainer-tls.rule=Host(`portainer.home.singhsays.com`)"
-      - "traefik.http.routers.portainer-tls.tls=true"
-      - "traefik.http.routers.portainer-tls.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.portainer-tls.tls.domains[0].main=home.singhsays.com"
-      - "traefik.http.routers.portainer-tls.tls.domains[0].sans=*.home.singhsays.com"
-      - "traefik.http.services.portainer.loadbalancer.server.scheme=https"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9443"
-      - "traefik.docker.network=services"
+  # portainer:
+  #   image: portainer/portainer-ee:latest
+  #   container_name: portainer
+  #   restart: always
+  #   networks:
+  #     - services
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - portainer-data-volume:/data
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.portainer.entrypoints=http"
+  #     - "traefik.http.routers.portainer.rule=Host(`portainer.home.singhsays.com`)"
+  #     - "traefik.http.middlewares.portainer-https-redirect.redirectscheme.scheme=https"
+  #     - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+  #     - "traefik.http.routers.portainer.middlewares=portainer-https-redirect"
+  #     - "traefik.http.routers.portainer-tls.entrypoints=https"
+  #     - "traefik.http.routers.portainer-tls.rule=Host(`portainer.home.singhsays.com`)"
+  #     - "traefik.http.routers.portainer-tls.tls=true"
+  #     - "traefik.http.routers.portainer-tls.tls.certresolver=letsencrypt"
+  #     - "traefik.http.routers.portainer-tls.tls.domains[0].main=home.singhsays.com"
+  #     - "traefik.http.routers.portainer-tls.tls.domains[0].sans=*.home.singhsays.com"
+  #     - "traefik.http.services.portainer.loadbalancer.server.scheme=https"
+  #     - "traefik.http.services.portainer.loadbalancer.server.port=9443"
+  #     - "traefik.docker.network=services"
 
-  syncthing:
-    image: lscr.io/linuxserver/syncthing:latest
-    container_name: syncthing
-    restart: always
-    networks:
-      - services
-    environment:
-      - PUID=1026
-      - PGID=100
-    volumes:
-      - syncthing-config-volume:/config
-      - syncthing-data-volume:/data
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.syncthing.entrypoints=http"
-      - "traefik.http.routers.syncthing.rule=Host(`syncthing.home.singhsays.com`)"
-      - "traefik.http.middlewares.syncthing-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.routers.syncthing.middlewares=syncthing-https-redirect"
-      - "traefik.http.routers.syncthing-tls.entrypoints=https"
-      - "traefik.http.routers.syncthing-tls.rule=Host(`syncthing.home.singhsays.com`)"
-      - "traefik.http.routers.syncthing-tls.tls=true"
-      - "traefik.http.routers.syncthing-tls.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.syncthing-tls.tls.domains[0].main=home.singhsays.com"
-      - "traefik.http.routers.syncthing-tls.tls.domains[0].sans=*.home.singhsays.com"
-      - "traefik.http.services.syncthing.loadbalancer.server.scheme=https"
-      - "traefik.http.services.syncthing.loadbalancer.server.port=8384"
-      - "traefik.docker.network=services"
-    ports:
-      - 22000:22000/tcp
-      - 22000:22000/udp
-      - 21027:21027/udp
+  # syncthing:
+  #   image: lscr.io/linuxserver/syncthing:latest
+  #   container_name: syncthing
+  #   restart: always
+  #   networks:
+  #     - services
+  #   environment:
+  #     - PUID=1026
+  #     - PGID=100
+  #   volumes:
+  #     - syncthing-config-volume:/config
+  #     - syncthing-data-volume:/data
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.syncthing.entrypoints=http"
+  #     - "traefik.http.routers.syncthing.rule=Host(`syncthing.home.singhsays.com`)"
+  #     - "traefik.http.middlewares.syncthing-https-redirect.redirectscheme.scheme=https"
+  #     - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+  #     - "traefik.http.routers.syncthing.middlewares=syncthing-https-redirect"
+  #     - "traefik.http.routers.syncthing-tls.entrypoints=https"
+  #     - "traefik.http.routers.syncthing-tls.rule=Host(`syncthing.home.singhsays.com`)"
+  #     - "traefik.http.routers.syncthing-tls.tls=true"
+  #     - "traefik.http.routers.syncthing-tls.tls.certresolver=letsencrypt"
+  #     - "traefik.http.routers.syncthing-tls.tls.domains[0].main=home.singhsays.com"
+  #     - "traefik.http.routers.syncthing-tls.tls.domains[0].sans=*.home.singhsays.com"
+  #     - "traefik.http.services.syncthing.loadbalancer.server.scheme=https"
+  #     - "traefik.http.services.syncthing.loadbalancer.server.port=8384"
+  #     - "traefik.docker.network=services"
+  #   ports:
+  #     - 22000:22000/tcp
+  #     - 22000:22000/udp
+  #     - 21027:21027/udp
 
-  postgres:
-    image: postgres:latest
-    container_name: postgres
-    restart: always
-    networks:
-      - services
-    environment:
-      - "POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password"
-    secrets:
-      - postgres_password
-    volumes:
-      - postgres-data-volume:/var/lib/postgresql/data
-    labels:
-      - "traefik.enable=true"
-      - "traefik.tcp.routers.postgres.entrypoints=postgres"
-      - "traefik.tcp.routers.postgres.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.postgres.service=postgres"
-      - "traefik.tcp.services.postgres.loadbalancer.server.port=5432"
-      - "traefik.docker.network=services"
+  # postgres:
+  #   image: postgres:latest
+  #   container_name: postgres
+  #   restart: always
+  #   networks:
+  #     - services
+  #   environment:
+  #     - "POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password"
+  #   secrets:
+  #     - postgres_password
+  #   volumes:
+  #     - postgres-data-volume:/var/lib/postgresql/data
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.tcp.routers.postgres.entrypoints=postgres"
+  #     - "traefik.tcp.routers.postgres.rule=HostSNI(`*`)"
+  #     - "traefik.tcp.routers.postgres.service=postgres"
+  #     - "traefik.tcp.services.postgres.loadbalancer.server.port=5432"
+  #     - "traefik.docker.network=services"
 
-  omada:
-    image: mbentley/omada-controller:5.15
-    container_name: omada
-    restart: unless-stopped
-    ulimits:
-      nofile:
-        soft: 4096
-        hard: 8192
-    stop_grace_period: 60s
-    network_mode: host
-    environment:
-      - PUID=508
-      - PGID=508
-      - MANAGE_HTTP_PORT=8088
-      - MANAGE_HTTPS_PORT=8043
-      - PORTAL_HTTP_PORT=8088
-      - PORTAL_HTTPS_PORT=8843
-      - PORT_APP_DISCOVERY=27001
-      - PORT_ADOPT_V1=29812
-      - PORT_UPGRADE_V1=29813
-      - PORT_MANAGER_V1=29811
-      - PORT_MANAGER_V2=29814
-      - PORT_DISCOVERY=29810
-      - PORT_TRANSFER_V2=29815
-      - PORT_RTTY=29816
-      - SHOW_SERVER_LOGS=true
-      - SHOW_MONGODB_LOGS=false
-      - SSL_CERT_NAME=tls.crt
-      - SSL_KEY_NAME=tls.key
-      - TZ=Etc/UTC
-    volumes:
-      - omada-data-volume:/opt/tplink/EAPController/data
-      - omada-logs-volume:/opt/tplink/EAPController/logs
+  # omada:
+  #   image: mbentley/omada-controller:5.15
+  #   container_name: omada
+  #   restart: unless-stopped
+  #   ulimits:
+  #     nofile:
+  #       soft: 4096
+  #       hard: 8192
+  #   stop_grace_period: 60s
+  #   network_mode: host
+  #   environment:
+  #     - PUID=508
+  #     - PGID=508
+  #     - MANAGE_HTTP_PORT=8088
+  #     - MANAGE_HTTPS_PORT=8043
+  #     - PORTAL_HTTP_PORT=8088
+  #     - PORTAL_HTTPS_PORT=8843
+  #     - PORT_APP_DISCOVERY=27001
+  #     - PORT_ADOPT_V1=29812
+  #     - PORT_UPGRADE_V1=29813
+  #     - PORT_MANAGER_V1=29811
+  #     - PORT_MANAGER_V2=29814
+  #     - PORT_DISCOVERY=29810
+  #     - PORT_TRANSFER_V2=29815
+  #     - PORT_RTTY=29816
+  #     - SHOW_SERVER_LOGS=true
+  #     - SHOW_MONGODB_LOGS=false
+  #     - SSL_CERT_NAME=tls.crt
+  #     - SSL_KEY_NAME=tls.key
+  #     - TZ=Etc/UTC
+  #   volumes:
+  #     - omada-data-volume:/opt/tplink/EAPController/data
+  #     - omada-logs-volume:/opt/tplink/EAPController/logs
 
-  jellyfin:
-    image: jellyfin/jellyfin
-    container_name: jellyfin
-    restart: unless-stopped
-    networks:
-      - services
-    environment:
-      - JELLYFIN_PublishedServerUrl=https://jellyfin.home.singhsays.com
-    volumes:
-      - jellyfin-config-volume:/config
-      - jellyfin-cache-volume:/cache
-      - music-data-volume:/media:ro
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.jellyfin.entrypoints=http"
-      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.home.singhsays.com`)"
-      - "traefik.http.middlewares.jellyfin-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.routers.jellyfin.middlewares=jellyfin-https-redirect"
-      - "traefik.http.routers.jellyfin-tls.entrypoints=https"
-      - "traefik.http.routers.jellyfin-tls.rule=Host(`jellyfin.home.singhsays.com`)"
-      - "traefik.http.routers.jellyfin-tls.tls=true"
-      - "traefik.http.routers.jellyfin-tls.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.jellyfin-tls.tls.domains[0].main=home.singhsays.com"
-      - "traefik.http.routers.jellyfin-tls.tls.domains[0].sans=*.home.singhsays.com"
-      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
-      - "traefik.docker.network=services"
+  # jellyfin:
+  #   image: jellyfin/jellyfin
+  #   container_name: jellyfin
+  #   restart: unless-stopped
+  #   networks:
+  #     - services
+  #   environment:
+  #     - JELLYFIN_PublishedServerUrl=https://jellyfin.home.singhsays.com
+  #   volumes:
+  #     - jellyfin-config-volume:/config
+  #     - jellyfin-cache-volume:/cache
+  #     - music-data-volume:/media:ro
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.jellyfin.entrypoints=http"
+  #     - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.home.singhsays.com`)"
+  #     - "traefik.http.middlewares.jellyfin-https-redirect.redirectscheme.scheme=https"
+  #     - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+  #     - "traefik.http.routers.jellyfin.middlewares=jellyfin-https-redirect"
+  #     - "traefik.http.routers.jellyfin-tls.entrypoints=https"
+  #     - "traefik.http.routers.jellyfin-tls.rule=Host(`jellyfin.home.singhsays.com`)"
+  #     - "traefik.http.routers.jellyfin-tls.tls=true"
+  #     - "traefik.http.routers.jellyfin-tls.tls.certresolver=letsencrypt"
+  #     - "traefik.http.routers.jellyfin-tls.tls.domains[0].main=home.singhsays.com"
+  #     - "traefik.http.routers.jellyfin-tls.tls.domains[0].sans=*.home.singhsays.com"
+  #     - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+  #     - "traefik.docker.network=services"
 
-  pihole:
-    image: pihole/pihole:latest
-    container_name: pihole
-    restart: unless-stopped
-    networks:
-      - services
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "853:853"
-    environment:
-      TZ: "America/Los_Angeles"
-      WEBPASSWORD_FILE: "/run/secrets/pihole_password"
-      DNSMASQ_LISTENING: "all"
-      VIRTUAL_HOST: "pihole.home.singhsays.com"
-    volumes:
-      - pihole-data-volume:/etc/pihole
-      - pihole-config-volume:/etc/dnsmasq.d
-    secrets:
-      - pihole_password
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.pihole.entrypoints=http"
-      - "traefik.http.routers.pihole.rule=Host(`pihole.home.singhsays.com`)"
-      - "traefik.http.middlewares.pihole-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.routers.pihole.middlewares=pihole-https-redirect"
-      - "traefik.http.routers.pihole-tls.entrypoints=https"
-      - "traefik.http.routers.pihole-tls.rule=Host(`pihole.home.singhsays.com`)"
-      - "traefik.http.routers.pihole-tls.tls=true"
-      - "traefik.http.routers.pihole-tls.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.pihole-tls.tls.domains[0].main=home.singhsays.com"
-      - "traefik.http.routers.pihole-tls.tls.domains[0].sans=*.home.singhsays.com"
-      - "traefik.http.services.pihole.loadbalancer.server.port=80"
-      - "traefik.docker.network=services"
+  # pihole:
+  #   image: pihole/pihole:latest
+  #   container_name: pihole
+  #   restart: unless-stopped
+  #   networks:
+  #     - services
+  #   ports:
+  #     - "53:53/tcp"
+  #     - "53:53/udp"
+  #     - "853:853"
+  #   environment:
+  #     TZ: "America/Los_Angeles"
+  #     WEBPASSWORD_FILE: "/run/secrets/pihole_password"
+  #     DNSMASQ_LISTENING: "all"
+  #     VIRTUAL_HOST: "pihole.home.singhsays.com"
+  #   volumes:
+  #     - pihole-data-volume:/etc/pihole
+  #     - pihole-config-volume:/etc/dnsmasq.d
+  #   secrets:
+  #     - pihole_password
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.pihole.entrypoints=http"
+  #     - "traefik.http.routers.pihole.rule=Host(`pihole.home.singhsays.com`)"
+  #     - "traefik.http.middlewares.pihole-https-redirect.redirectscheme.scheme=https"
+  #     - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+  #     - "traefik.http.routers.pihole.middlewares=pihole-https-redirect"
+  #     - "traefik.http.routers.pihole-tls.entrypoints=https"
+  #     - "traefik.http.routers.pihole-tls.rule=Host(`pihole.home.singhsays.com`)"
+  #     - "traefik.http.routers.pihole-tls.tls=true"
+  #     - "traefik.http.routers.pihole-tls.tls.certresolver=letsencrypt"
+  #     - "traefik.http.routers.pihole-tls.tls.domains[0].main=home.singhsays.com"
+  #     - "traefik.http.routers.pihole-tls.tls.domains[0].sans=*.home.singhsays.com"
+  #     - "traefik.http.services.pihole.loadbalancer.server.port=80"
+  #     - "traefik.docker.network=services"
 
-  factoriosrv:
-    image: factoriotools/factorio:stable
-    container_name: factoriosrv
-    restart: unless-stopped
-    network_mode: "host"
-    environment:
-      - INSTANCE_NAME="singhsays"
-      - INSTANCE_DESC="singhsays factorio server"
-      - USERNAME="singhsays"
-      - TOKEN=${FACTORIO_TOKEN}
-      - DLC_SPACE_AGE=true
-    volumes:
-      - factorio-data-volume:/factorio
-    ports:
-      - 34197:34197/udp
-      - 27015:27015/tcp
+  # factoriosrv:
+  #   image: factoriotools/factorio:stable
+  #   container_name: factoriosrv
+  #   restart: unless-stopped
+  #   network_mode: "host"
+  #   environment:
+  #     - INSTANCE_NAME="singhsays"
+  #     - INSTANCE_DESC="singhsays factorio server"
+  #     - USERNAME="singhsays"
+  #     - TOKEN=${FACTORIO_TOKEN}
+  #     - DLC_SPACE_AGE=true
+  #   volumes:
+  #     - factorio-data-volume:/factorio
+  #   ports:
+  #     - 34197:34197/udp
+  #     - 27015:27015/tcp
 
 networks:
   services:
@@ -245,102 +245,102 @@ networks:
       com.docker.network.bridge.name: "services"
 
 volumes:
-  portainer-data-volume:
-    name: portainer-data-volume
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.0.10,rw"
-      device: ":/volume1/docker/portainer-data-volume"
+  # portainer-data-volume:
+  #   name: portainer-data-volume
+  #   driver: local
+  #   driver_opts:
+  #     type: "nfs"
+  #     o: "addr=10.0.0.10,rw"
+  #     device: ":/volume1/docker/portainer-data-volume"
   cert-data-volume:
     name: cert-data-volume
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.0.10,rw"
-      device: ":/volume1/docker/cert-data-volume"
-  postgres-data-volume:
-    name: postgres-data-volume
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.0.10,rw"
-      device: ":/volume1/docker/postgres-data-volume"
-  syncthing-data-volume:
-    name: syncthing-data-volume
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.0.10,rw"
-      device: ":/volume1/docker/syncthing-data-volume/data"
-  syncthing-config-volume:
-    name: syncthing-config-volume
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.0.10,rw"
-      device: ":/volume1/docker/syncthing-data-volume/config"
-  omada-data-volume:
-    name: omada-data-volume
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.0.10,rw"
-      device: ":/volume1/docker/omada-data-volume/data"
-  omada-logs-volume:
-    name: omada-logs-volume
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.0.10,rw"
-      device: ":/volume1/docker/omada-data-volume/logs"
-  pihole-data-volume:
-    name: pihole-data-volume
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.0.10,rw"
-      device: ":/volume1/docker/pihole-data-volume/data"
-  pihole-config-volume:
-    name: pihole-config-volume
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.0.10,rw"
-      device: ":/volume1/docker/pihole-data-volume/config"
-  jellyfin-cache-volume:
-    name: jellyfin-cache-volume
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.0.10,rw"
-      device: ":/volume1/docker/jellyfin-data-volume/cache"
-  jellyfin-config-volume:
-    name: jellyfin-config-volume
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.0.10,rw"
-      device: ":/volume1/docker/jellyfin-data-volume/config"
-  music-data-volume:
-    name: music-data-volume
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.0.10,rw"
-      device: ":/volume1/music"
-  factorio-data-volume:
-    name: factorio-data-volume
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.0.0.10,rw"
-      device: ":/volume1/docker/factorio-data-volume"
+    # driver: local
+    # driver_opts:
+    #   type: "nfs"
+    #   o: "addr=10.0.0.10,rw"
+    #   device: ":/volume1/docker/cert-data-volume"
+  # postgres-data-volume:
+  #   name: postgres-data-volume
+  #   driver: local
+  #   driver_opts:
+  #     type: "nfs"
+  #     o: "addr=10.0.0.10,rw"
+  #     device: ":/volume1/docker/postgres-data-volume"
+  # syncthing-data-volume:
+  #   name: syncthing-data-volume
+  #   driver: local
+  #   driver_opts:
+  #     type: "nfs"
+  #     o: "addr=10.0.0.10,rw"
+  #     device: ":/volume1/docker/syncthing-data-volume/data"
+  # syncthing-config-volume:
+  #   name: syncthing-config-volume
+  #   driver: local
+  #   driver_opts:
+  #     type: "nfs"
+  #     o: "addr=10.0.0.10,rw"
+  #     device: ":/volume1/docker/syncthing-data-volume/config"
+  # omada-data-volume:
+  #   name: omada-data-volume
+  #   driver: local
+  #   driver_opts:
+  #     type: "nfs"
+  #     o: "addr=10.0.0.10,rw"
+  #     device: ":/volume1/docker/omada-data-volume/data"
+  # omada-logs-volume:
+  #   name: omada-logs-volume
+  #   driver: local
+  #   driver_opts:
+  #     type: "nfs"
+  #     o: "addr=10.0.0.10,rw"
+  #     device: ":/volume1/docker/omada-data-volume/logs"
+  # pihole-data-volume:
+  #   name: pihole-data-volume
+  #   driver: local
+  #   driver_opts:
+  #     type: "nfs"
+  #     o: "addr=10.0.0.10,rw"
+  #     device: ":/volume1/docker/pihole-data-volume/data"
+  # pihole-config-volume:
+  #   name: pihole-config-volume
+  #   driver: local
+  #   driver_opts:
+  #     type: "nfs"
+  #     o: "addr=10.0.0.10,rw"
+  #     device: ":/volume1/docker/pihole-data-volume/config"
+  # jellyfin-cache-volume:
+  #   name: jellyfin-cache-volume
+  #   driver: local
+  #   driver_opts:
+  #     type: "nfs"
+  #     o: "addr=10.0.0.10,rw"
+  #     device: ":/volume1/docker/jellyfin-data-volume/cache"
+  # jellyfin-config-volume:
+  #   name: jellyfin-config-volume
+  #   driver: local
+  #   driver_opts:
+  #     type: "nfs"
+  #     o: "addr=10.0.0.10,rw"
+  #     device: ":/volume1/docker/jellyfin-data-volume/config"
+  # music-data-volume:
+  #   name: music-data-volume
+  #   driver: local
+  #   driver_opts:
+  #     type: "nfs"
+  #     o: "addr=10.0.0.10,rw"
+  #     device: ":/volume1/music"
+  # factorio-data-volume:
+  #   name: factorio-data-volume
+  #   driver: local
+  #   driver_opts:
+  #     type: "nfs"
+  #     o: "addr=10.0.0.10,rw"
+  #     device: ":/volume1/docker/factorio-data-volume"
 
 secrets:
   do_auth_token:
     file: "./do_auth_token.secret"
-  postgres_password:
-    file: "./postgres_password.secret"
-  pihole_password:
-    file: "./pihole_password.secret"
+  # postgres_password:
+  #   file: "./postgres_password.secret"
+  # pihole_password:
+  #   file: "./pihole_password.secret"
